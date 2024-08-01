@@ -9,6 +9,7 @@ namespace RestWithASPNETUdemy.Controllers
        
 
         private readonly ILogger<CalculatorController> _logger;
+        
 
         public CalculatorController(ILogger<CalculatorController> logger)
         {
@@ -16,9 +17,9 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpGet("sum/{firstNumber}/{secondNumber}")]
-        public IActionResult Get(string firstNumber, string secondNumber)
+        public IActionResult GetSum(string firstNumber, string secondNumber)
         {
-            if (IsNumeric(firstNumber) && IsNumeric(firstNumber))
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
             {
                 var sum = ConvertToDecimal(firstNumber) + ConvertToDecimal(secondNumber);
                 return Ok(sum.ToString());
@@ -26,13 +27,86 @@ namespace RestWithASPNETUdemy.Controllers
             return BadRequest("Invalid Input");
         }
 
-        private int ConvertToDecimal(string firstNumber)
+        [HttpGet("sub/{firstNumber}/{secondNumber}")]
+        public IActionResult GetSub(string firstNumber, string secondNumber)
         {
-            throw new NotImplementedException();
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            {
+                var sum = ConvertToDecimal(firstNumber) - ConvertToDecimal(secondNumber);
+                return Ok(sum.ToString());
+            }
+            return BadRequest("Invalid Input");
+        }
+        [HttpGet("multi/{firstNumber}/{secondNumber}")]
+        public IActionResult GetMulti(string firstNumber, string secondNumber)
+        {
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            {
+                var sum = ConvertToDecimal(firstNumber) + ConvertToDecimal(secondNumber);
+                return Ok(sum.ToString());
+            }
+            return BadRequest("Invalid Input");
+        }
+        [HttpGet("div/{firstNumber}/{secondNumber}")]
+        public IActionResult GetDiv(string firstNumber, string secondNumber)
+        {
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            {
+                var sum = ConvertToDecimal(firstNumber) / ConvertToDecimal(secondNumber);
+                return Ok(sum.ToString());
+            }
+            return BadRequest("Invalid Input");
+        }
+        [HttpGet("med/{firstNumber}/{secondNumber}")]
+        public IActionResult GetMed(string firstNumber, string secondNumber)
+        {
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            {
+                var sum = (ConvertToDecimal(firstNumber) + ConvertToDecimal(secondNumber))/2;
+                return Ok(sum.ToString());
+            }
+            return BadRequest("Invalid Input");
+        }
+        [HttpGet("raiz/{firstNumber}")]
+        public IActionResult GetRaiz(string firstNumber)
+        {
+            if (IsNumeric(firstNumber))
+            {
+                var sum = Math.Sqrt(ConvertToDouble(firstNumber));
+                return Ok(sum.ToString());
+            }
+            return BadRequest("Invalid Input");
         }
 
-        private bool IsNumeric(string firstNumber)
+        private decimal ConvertToDecimal(string strNumber)
         {
+            decimal decimalValue;
+            if (decimal.TryParse(strNumber, out decimalValue))
+            {
+                return decimalValue;
+            }
+            return 0;
+        }
+        private double ConvertToDouble(string strNumber)
+        {
+            double decimalValue;
+            if (double.TryParse(strNumber, out decimalValue))
+            {
+                return decimalValue;
+            }
+            return 0;
+        }
+
+        private bool IsNumeric(string strNumber)
+        {
+            double number;
+            //Aqui vai tentar parsear, se der certo retorna true, se não der certo retorna false
+            bool isNumber = double.TryParse(
+                strNumber, 
+                System.Globalization.NumberStyles.Any, 
+                System.Globalization.NumberFormatInfo.InvariantInfo, 
+                out number);
+            return (isNumber) ;
             throw new NotImplementedException();
         }
     }
